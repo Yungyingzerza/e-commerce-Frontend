@@ -1,13 +1,19 @@
 import { useEffect, useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import { API } from './constants/API'
-import apiRequest from './utils/apiRequest'
+import { API } from '../constants/API'
+import apiRequest from '../utils/apiRequest'
+import { useSelector } from 'react-redux'
+import Home from '../pages/Home/Home'
 
 function App() {
 
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+
+  const user = useSelector(state => state.user)
+
+  useEffect(() => {
+    console.log('User:', user)
+  }, [])
 
   const handleLogin = async () => {
     try {
@@ -16,7 +22,7 @@ function App() {
         body: JSON.stringify({ email, password })
       })
 
-      if(response.status === 200) {
+      if (response.status === 200) {
         console.log('Login success:', response)
         alert('Login success')
       } else {
@@ -28,14 +34,21 @@ function App() {
       console.error('Login failed:', error)
     }
   }
-  
+
   return (
     <>
-      <div className='flex flex-col gap-2 justify-center items-center w-screen h-screen'>
-        <input className='border' type='email' placeholder='Email' value={email} onChange={(e) => setEmail(e.target.value)} />
-        <input className='border' type='password' placeholder='Password' value={password} onChange={(e) => setPassword(e.target.value)} />
-        <button className='bg-blue-500 text-white p-2 rounded' onClick={handleLogin}>Login</button>
-      </div>
+      {
+        user.id ? (
+          <>
+            <h1>Welcome {user.email}</h1>
+            <button onClick={() => alert('Logout')}>Logout</button>
+          </>
+        ) : (
+          <>
+            <Home />
+          </>
+        )
+      }
     </>
   )
 }
