@@ -4,11 +4,11 @@ export default function Navbar() {
   return (
     <>
       <div className='flex flex-row sticky top-0 z-50'>
-        <div className='w-8 bg-white'>
+        <div className='w-8 bg-white hidden md:block'>
           <img src={logo} alt='logo' className='w-16 h-16 rounded-full bg-white absolute' />
         </div>
         <div className="navbar bg-[#F8E8EE] ">
-          <div className="navbar-start ml-8">
+          <div className="navbar-start md:ml-8">
             <div className='hidden lg:flex flex-row gap-10 items-center'>
               <a href="#" className="text-lg quicksand-500">Clothing</a>
               <a href="#" className="text-lg quicksand-500">Shoes</a>
