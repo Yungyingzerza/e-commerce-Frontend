@@ -3,7 +3,7 @@ import logo from '../../assets/logo.png'
 export default function Navbar() {
   return (
     <>
-      <div className='flex flex-row sticky top-0 z-50'>
+      <div className='flex flex-row sticky top-0 z-[99999]'>
         <div className='w-8 bg-white hidden md:block'>
           <img src={logo} alt='logo' className='w-16 h-16 rounded-full bg-white absolute' />
         </div>
