@@ -1,6 +1,30 @@
 @import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300..700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inconsolata:wght@700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Ubuntu+Sans+Mono&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Ubuntu+Sans+Mono:wght@700&display=swap');
 @import "tailwindcss";
 @plugin "daisyui";
+
+.ubuntu-sans-mono-400 {
+    font-family: "Ubuntu Sans Mono", serif;
+    font-optical-sizing: auto;
+    font-weight: 400;
+    font-style: normal;
+}
+
+.ubuntu-sans-mono-700 {
+    font-family: "Ubuntu Sans Mono", serif;
+    font-optical-sizing: auto;
+    font-weight: 700;
+    font-style: normal;
+}
+
+.inconsolata-700 {
+    font-family: "Inconsolata", serif;
+    font-optical-sizing: auto;
+    font-weight: 700;
+    font-style: normal;
+}
 
 .quicksand-300 {
     font-family: "Quicksand", serif;

@@ -3,6 +3,7 @@ import { API } from '../constants/API'
 import apiRequest from '../utils/apiRequest'
 import { useSelector } from 'react-redux'
 import Home from '../pages/Home/Home'
+import Login from '../pages/Login/Login'
 
 function App() {
 
@@ -45,7 +46,8 @@ function App() {
           </>
         ) : (
           <>
-            <Home />
+            {/* <Home /> */}
+            <Login />
           </>
         )
       }
