@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom"
 export default function Login() {
     return (
         <>
@@ -35,7 +36,9 @@ export default function Login() {
                             <input type="password" placeholder="Password" className="input input-bordered w-full max-w-xs md:max-w-md rounded-full" />
                         </label>
 
-                        <button className="btn bg-[#F3D0D7] text-[#c790a6] w-full max-w-32 rounded-full ubuntu-sans-mono-700">LOGIN</button>
+                        <Link to="/register" className="text-white ubuntu-sans-mono-400 md:w-md w-xs underline text-sm">Click here to register!</Link>
+
+                        <button className="btn bg-[#F3D0D7] text-[#c790a6] w-full max-w-32 rounded-full inconsolata-700 text-lg">LOGIN</button>
                     </div>
 
 
