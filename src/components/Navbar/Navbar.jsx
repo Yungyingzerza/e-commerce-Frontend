@@ -1,4 +1,5 @@
 import logo from '../../assets/logo.png'
+import { Link } from 'react-router-dom'
 
 export default function Navbar() {
   return (
@@ -163,6 +164,8 @@ export default function Navbar() {
                 </li>
                 <li><a>Settings</a></li>
                 <li><a>Logout</a></li>
+                <li><Link to='/login'>Test Login</Link></li>
+                <li><Link to='/register'>Test Register</Link></li>
               </ul>
             </div>
           </div>
