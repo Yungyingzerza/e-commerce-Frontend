@@ -35,7 +35,7 @@ const getCsrfToken = async () => {
         headers: {
           'Content-Type': 'application/json',
           'Accept': 'application/json',
-          'X-XSRF-TOKEN': token,
+          'X-XSRF-TOKEN': token ?? '',
           'Authorization': `Bearer ${tokenAuth}`
         },
       };
