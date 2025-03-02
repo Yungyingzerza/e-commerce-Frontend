@@ -28,6 +28,7 @@ const getCsrfToken = async () => {
   const apiRequest = async (url, options = {}) => {
     try {
       const token = await getCsrfToken();
+      const tokenAuth = localStorage.getItem('token')
   
       const defaultOptions = {
         credentials: 'include', // Important for cookies
@@ -35,6 +36,7 @@ const getCsrfToken = async () => {
           'Content-Type': 'application/json',
           'Accept': 'application/json',
           'X-XSRF-TOKEN': token,
+          'Authorization': `Bearer ${tokenAuth}`
         },
       };
   
@@ -47,10 +49,7 @@ const getCsrfToken = async () => {
         },
       });
   
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-  
+
       return await response.json();
     } catch (error) {
       console.error('API request failed:', error);

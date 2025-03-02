@@ -1,7 +1,62 @@
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
+import apiRequest from "../../utils/apiRequest"
+import { useState, useCallback } from "react"
+import { API } from "../../constants/API"
+import { setBalance, setEmail, setId, setLevel, setName, setProfileUrl, setSurname } from '../../store/userSlice'
+import { useDispatch } from "react-redux"
+import LoadingPage from "../../components/LoadingPage/LoadingPage"
 export default function Login() {
+
+    const [email, setEmail] = useState('')
+    const [password, setPassword] = useState('')
+    const [loading, setLoading] = useState(false)
+
+    const navigate = useNavigate()
+    const dispatch = useDispatch()
+
+    const handleLogin = useCallback(async () => {
+        try {
+            setLoading(true)
+
+            const response = await apiRequest(API.login, {
+                method: 'POST',
+                body: JSON.stringify({ email, password })
+            })
+
+            if(response && response.token){
+                localStorage.setItem('token', response.token)
+
+                apiRequest(API.user)
+                    .then(response => {
+                        dispatch(setId(response.id))
+                        dispatch(setName(response.name))
+                        dispatch(setSurname(response.surname))
+                        dispatch(setEmail(response.email))
+                        dispatch(setProfileUrl(response.profileUrl))
+                        dispatch(setBalance(response.balance))
+                        dispatch(setLevel(response.level))
+                        dispatch(setEmail(response.email))
+                    })
+                    .catch(error => {
+                        console.error('User fetch failed')
+                    })
+
+                navigate('/')
+            }
+
+            setLoading(false)
+
+        } catch (error) {
+            console.error('Login failed')
+            setLoading(false)
+        }
+    }, [email, password])
+
+    
+
     return (
         <>
+           {loading && <LoadingPage />}
             <div className="flex flex-row w-screen h-screen">
                 <div className="w-1/2 h-full relative md:block hidden">
                     <img src="/login.png" alt="login" className="object-cover w-full h-full absolute" />
@@ -26,19 +81,19 @@ export default function Login() {
                             <div className="label">
                                 <span className="label-text text-white ubuntu-sans-mono-400 my-1">Email</span>
                             </div>
-                            <input type="text" placeholder="Email" className="input input-bordered w-full max-w-xs md:max-w-md rounded-full" />
+                            <input onChange={e => setEmail(e.currentTarget.value)} type="text" placeholder="Email" className="input input-bordered w-full max-w-xs md:max-w-md rounded-full" />
                         </label>
 
                         <label className="form-control w-full max-w-xs md:max-w-md">
                             <div className="label">
                                 <span className="label-text text-white ubuntu-sans-mono-400 my-1">Password</span>
                             </div>
-                            <input type="password" placeholder="Password" className="input input-bordered w-full max-w-xs md:max-w-md rounded-full" />
+                            <input onChange={e => setPassword(e.currentTarget.value)} type="password" placeholder="Password" className="input input-bordered w-full max-w-xs md:max-w-md rounded-full" />
                         </label>
 
                         <Link to="/register" className="text-white ubuntu-sans-mono-400 md:w-md w-xs underline text-sm">Click here to register!</Link>
 
-                        <button className="btn bg-[#F3D0D7] text-[#c790a6] w-full max-w-32 rounded-full inconsolata-700 text-lg">LOGIN</button>
+                        <button onClick={handleLogin} className="btn bg-[#F3D0D7] text-[#c790a6] w-full max-w-32 rounded-full inconsolata-700 text-lg">LOGIN</button>
                     </div>
 
 
