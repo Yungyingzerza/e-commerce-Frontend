@@ -1,4 +1,5 @@
 import { API } from "../constants/API";
+
 const getCsrfToken = async () => {
     try {
       // First, get the CSRF cookie from Laravel's sanctum endpoint
@@ -35,7 +36,7 @@ const getCsrfToken = async () => {
         headers: {
           'Content-Type': 'application/json',
           'Accept': 'application/json',
-          'X-XSRF-TOKEN': token ?? '',
+          'X-XSRF-TOKEN': token,
           'Authorization': `Bearer ${tokenAuth}`
         },
       };
