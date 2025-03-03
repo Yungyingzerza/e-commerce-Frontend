@@ -3,13 +3,14 @@ import { useSelector, useDispatch } from 'react-redux'
 import { API } from '../../constants/API'
 import { useCallback } from 'react'
 import apiRequest from '../../utils/apiRequest'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { setBalance, setEmail, setId, setLevel, setName, setProfileUrl, setSurname } from '../../store/userSlice'
 
 export default function Navbar() {
   const user = useSelector(state => state.user)
 
   const dispatch = useDispatch()
+  const navigate = useNavigate()
 
   const handleLogout = useCallback(() => {
     apiRequest(API.logout, {
@@ -30,7 +31,7 @@ export default function Navbar() {
     <>
       <div className='flex flex-row sticky top-0 z-[99999]'>
         <div className='w-8 bg-white hidden md:block'>
-          <img src={logo} alt='logo' className='w-16 h-16 rounded-full bg-white absolute' />
+          <img onClick={e => navigate('/')}  src={logo} alt='logo' className='w-16 h-16 rounded-full bg-white absolute cursor-pointer' />
         </div>
         <div className="navbar bg-[#F8E8EE] ">
           <div className="navbar-start md:ml-8">
@@ -184,10 +185,10 @@ export default function Navbar() {
                       tabIndex={0}
                       className="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow">
                       <li>
-                        <a className="justify-between">
+                        <Link to='/profile' className="justify-between">
                           Profile
                           <span className="badge">New</span>
-                        </a>
+                        </Link>
                       </li>
                       <li onClick={handleLogout}><a>Logout</a></li>
                     </ul>

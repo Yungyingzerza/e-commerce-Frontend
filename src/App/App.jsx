@@ -1,16 +1,18 @@
 import { useEffect } from 'react'
 import { API } from '../constants/API'
 import apiRequest from '../utils/apiRequest'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { Routes, Route } from 'react-router-dom'
 import Home from '../pages/Home/Home'
 import Login from '../pages/Login/Login'
 import Register from '../pages/Register/Register'
+import Profile from '../pages/Profile/Profile'
 import { setBalance, setEmail, setId, setLevel, setName, setProfileUrl, setSurname, setLoading } from '../store/userSlice'
-
+import LoadingPage from '../components/LoadingPage/LoadingPage'
 function App() {
 
   const dispatch = useDispatch()
+  const user = useSelector(state =>state.user)
 
   useEffect(() => {
     const abortController = new AbortController()
@@ -45,11 +47,26 @@ function App() {
 
   return (
     <>
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
-      </Routes>
+
+      {
+        user.loading ?
+          <div className='bg-red-200 h-screen w-screen flex justify-center items-center'>
+            <LoadingPage />
+          </div>
+        :
+        user.id ?
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/profile" element={<Profile />} />
+            <Route path="*" element={<Home />} />
+          </Routes>
+        :
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
+          </Routes>
+      }
     </>
   )
 }

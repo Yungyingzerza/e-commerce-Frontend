@@ -4,6 +4,18 @@
 @import "tailwindcss";
 @plugin "daisyui";
 
+@font-face {
+    font-family: 'Jeju Myeongjo';
+    src: url('./JejuMyeongjo.ttf.woff') format('woff'); /* Modern browsers */
+    font-weight: 400;
+    font-style: normal;
+}
+
+/* Usage */
+.jeju-myeongjo {
+    font-family: 'Jeju Myeongjo', serif;
+}
+
 .ubuntu-sans-mono-400 {
     font-family: "Ubuntu Sans Mono", serif;
     font-optical-sizing: auto;
