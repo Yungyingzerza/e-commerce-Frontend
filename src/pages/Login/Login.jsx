@@ -7,7 +7,7 @@ import { useDispatch } from "react-redux"
 import LoadingPage from "../../components/LoadingPage/LoadingPage"
 export default function Login() {
 
-    const [email, setEmail] = useState('')
+    const [email, setEmailInput] = useState('')
     const [password, setPassword] = useState('')
     const [loading, setLoading] = useState(false)
 
@@ -27,21 +27,24 @@ export default function Login() {
                 localStorage.setItem('token', response.token)
 
                 apiRequest(API.user)
-                    .then(response => {
-                        dispatch(setId(response.id))
-                        dispatch(setName(response.name))
-                        dispatch(setSurname(response.surname))
-                        dispatch(setEmail(response.email))
-                        dispatch(setProfileUrl(response.profileUrl))
-                        dispatch(setBalance(response.balance))
-                        dispatch(setLevel(response.level))
-                        dispatch(setEmail(response.email))
+                    .then(res => {
+
+                        dispatch(setName(res.name))
+                        dispatch(setSurname(res.surname))
+                        dispatch(setEmail(res.email))
+                        dispatch(setProfileUrl(res.profile_url))
+                        dispatch(setBalance(res.balance))
+                        dispatch(setLevel(res.level))
+                        dispatch(setEmail(res.email))
+                        dispatch(setId(res.id))
+
+                        navigate('/')
+
                     })
                     .catch(error => {
-                        console.error('User fetch failed')
+                        console.error('User fetch failed', error)
                     })
 
-                navigate('/')
             }
 
             setLoading(false)
@@ -81,7 +84,7 @@ export default function Login() {
                             <div className="label">
                                 <span className="label-text text-white ubuntu-sans-mono-400 my-1">Email</span>
                             </div>
-                            <input onChange={e => setEmail(e.currentTarget.value)} type="text" placeholder="Email" className="input input-bordered w-full max-w-xs md:max-w-md rounded-full" />
+                            <input onChange={e => setEmailInput(e.currentTarget.value)} type="text" placeholder="Email" className="input input-bordered w-full max-w-xs md:max-w-md rounded-full" />
                         </label>
 
                         <label className="form-control w-full max-w-xs md:max-w-md">
