@@ -7,6 +7,7 @@ import Home from '../pages/Home/Home'
 import Login from '../pages/Login/Login'
 import Register from '../pages/Register/Register'
 import Profile from '../pages/Profile/Profile'
+import Product from '../pages/Product/Product'
 import { setBalance, setEmail, setId, setLevel, setName, setProfileUrl, setSurname, setLoading } from '../store/userSlice'
 import LoadingPage from '../components/LoadingPage/LoadingPage'
 function App() {
@@ -58,11 +59,13 @@ function App() {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/profile" element={<Profile />} />
+            <Route path="/product/:id" element={<Product />} />
             <Route path="*" element={<Home />} />
           </Routes>
         :
           <Routes>
             <Route path="/" element={<Home />} />
+            <Route path="/product/:id" element={<Product />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
           </Routes>

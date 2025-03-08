@@ -5,4 +5,5 @@ export const API = {
     "logout": `${import.meta.env.VITE_BASE_API}/logout`,
     "register": `${import.meta.env.VITE_BASE_API}/register`,
     "addresses": `${import.meta.env.VITE_BASE_API}/api/user/addresses`,
+    "product": `${import.meta.env.VITE_BASE_API}/api/product`,
 }

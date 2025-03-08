@@ -1,6 +1,9 @@
 @import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300..700&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Inconsolata:wght@700&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Ubuntu+Sans+Mono&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Ubuntu+Sans+Mono:wght@400..700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Varta:wght@700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Vazirmatn:wght@700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Trispace&display=swap');
 @import "tailwindcss";
 @plugin "daisyui";
 
@@ -11,15 +14,48 @@
     font-style: normal;
 }
 
+
 /* Usage */
 .jeju-myeongjo {
     font-family: 'Jeju Myeongjo', serif;
+}
+
+.price {
+    font-family: "Varta", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 700;
+    font-style: normal;
+}
+
+.trispace {
+    font-family: "Trispace", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 400;
+    font-style: normal;
+    font-variation-settings:
+      "wdth" 100;
+}
+  
+  
+
+.vazirmatn-700 {
+    font-family: "Vazirmatn", serif;
+    font-optical-sizing: auto;
+    font-weight: 700;
+    font-style: normal;
 }
 
 .ubuntu-sans-mono-400 {
     font-family: "Ubuntu Sans Mono", serif;
     font-optical-sizing: auto;
     font-weight: 400;
+    font-style: normal;
+}
+
+.ubuntu-sans-mono-700 {
+    font-family: "Ubuntu Sans Mono", serif;
+    font-optical-sizing: auto;
+    font-weight: 700;
     font-style: normal;
 }
 
