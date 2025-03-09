@@ -78,20 +78,17 @@ export default function Wishlist() {
             <div className="w-24 sm:w-1/3 skeleton h-12 duration-0"></div>
             <div className="flex flex-col gap-2 items-center justify-center flex-1">
                 <div className="skeleton h-12 sm:w-32 w-20 duration-0"></div>
-                <div className="skeleton h-12 sm:w-32 w-20 duration-0"></div>
             </div>
 
             <div className="w-24 sm:w-1/3 skeleton h-12 duration-0"></div>
             <div className="w-24 sm:w-1/3 skeleton h-12 duration-0"></div>
             <div className="flex flex-col gap-2 items-center justify-center flex-1">
                 <div className="skeleton h-12 sm:w-32 w-20 duration-0"></div>
-                <div className="skeleton h-12 sm:w-32 w-20 duration-0"></div>
             </div>
 
             <div className="w-24 sm:w-1/3 skeleton h-12 duration-0"></div>
             <div className="w-24 sm:w-1/3 skeleton h-12 duration-0"></div>
             <div className="flex flex-col gap-2 items-center justify-center flex-1">
-                <div className="skeleton h-12 sm:w-32 w-20 duration-0"></div>
                 <div className="skeleton h-12 sm:w-32 w-20 duration-0"></div>
             </div>
           </div>
@@ -158,12 +155,9 @@ export default function Wishlist() {
                   </h2>
                 </div>
                 <div className="flex flex-col gap-2 w-1/3 items-center">
-                  <button className="btn btn-info text-white px-4 py-1 rounded-lg sm:w-32 w-24">
-                    Add to cart
-                  </button>
                   <button
                     onClick={(e) => handleRemove(item.id)}
-                    className="btn btn-error text-white px-4 py-1 rounded-lg sm:w-32 w-24"
+                    className="btn btn-error text-white px-4 py-1 rounded-lg sm:w-32 w-24 ubuntu-sans-mono-400"
                   >
                     Remove
                   </button>
