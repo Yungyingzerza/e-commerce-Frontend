@@ -35,7 +35,7 @@ export default function Navbar() {
         </div>
         <div className="navbar bg-[#F8E8EE] ">
           <div className="navbar-start md:ml-8">
-            <div className='hidden lg:flex flex-row gap-10 items-center'>
+            <div className='hidden lg:flex flex-row gap-10 items-center mx-4 '>
               <Link to={`/category/clothing`} className="text-lg quicksand-500">Clothing</Link>
               <Link to={`/category/shoes`} className="text-lg quicksand-500">Shoes</Link>
               <Link to={`/category/equipment`} className="text-lg quicksand-500">Equipment</Link>
