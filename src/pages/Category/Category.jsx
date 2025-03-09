@@ -67,10 +67,11 @@ export default function Category() {
                 <h1 className='ubuntu-sans-mono-400 text-4xl text-center mt-10'>{name.toUpperCase()}</h1>
             
                 <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-10 mt-10 mx-auto place-items-center'>
-                    {product.map(item => 
+                    {product.map((item, index) => 
                         <Link to={`/product/${item.id}`} key={item.id} className='w-64 h-fit flex flex-col items-center gap-2 cursor-pointer hover:scale-105 transform transition-transform duration-300'>
                             <img src={item.product_image[0].image_url} alt={item.name} className='h-48 w-48 object-cover' />
                             <div className='flex flex-col gap-2'>
+                                {index < 3 && <h1 className='ubuntu-sans-mono-700 text-2xl w-full text-[#CF6A6A]'>NEW PRODUCT</h1>}
                                 <h1 className='ubuntu-sans-mono-700 text-lg w-full'>{item.name}</h1>
                                 <h2 className='ubuntu-sans-mono-400 text-lg w-full'>{item.price.toLocaleString()} THB</h2>
                             </div>

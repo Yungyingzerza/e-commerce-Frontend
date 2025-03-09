@@ -11,6 +11,7 @@ import Product from '../pages/Product/Product'
 import { setBalance, setEmail, setId, setLevel, setName, setProfileUrl, setSurname, setLoading } from '../store/userSlice'
 import LoadingPage from '../components/LoadingPage/LoadingPage'
 import Category from '../pages/Category/Category'
+import Wishlist from '../pages/Wishlist/Wishlist'
 function App() {
 
   const dispatch = useDispatch()
@@ -60,6 +61,7 @@ function App() {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/profile" element={<Profile />} />
+            <Route path='/wishlist' element={<Wishlist />} />
             <Route path="/product/:id" element={<Product />} />
             <Route path="/category/:name" element={<Category />} />
             <Route path="*" element={<Home />} />
@@ -68,6 +70,7 @@ function App() {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/product/:id" element={<Product />} />
+            <Route path="/category/:name" element={<Category />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
           </Routes>

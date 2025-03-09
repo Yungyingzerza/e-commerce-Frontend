@@ -8,4 +8,6 @@ export const API = {
     "product": `${import.meta.env.VITE_BASE_API}/api/product`,
     "recent": `${import.meta.env.VITE_BASE_API}/api/product/recent`,
     "category": `${import.meta.env.VITE_BASE_API}/api/product/category`,
+    "wishlist": `${import.meta.env.VITE_BASE_API}/api/wishlist`,
+    "wishlistByProduct": `${import.meta.env.VITE_BASE_API}/api/wishlist/product`,
 }

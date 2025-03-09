@@ -47,6 +47,9 @@ export default function Profile() {
                             <h1 className="text-2xl ubuntu-sans-mono-400">{user.name}</h1>
                             <h1 className="text-2xl  ubuntu-sans-mono-400">{user.surname}</h1>
                         </div>
+                        <div className="flex flex-row gap-5 mt-2">
+                            <h1 className="text-2xl ubuntu-sans-mono-400">Balance: {user.balance.toLocaleString()}</h1>
+                        </div>
                     </div>
                 }
                 {

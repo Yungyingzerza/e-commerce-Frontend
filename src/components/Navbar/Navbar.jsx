@@ -58,9 +58,9 @@ export default function Navbar() {
               <ul
                 tabIndex="0"
                 className="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow">
-                <li><a className="text-lg quicksand-500">Clothing</a></li>
-                <li><a className="text-lg quicksand-500">Shoes</a></li>
-                <li><a className="text-lg quicksand-500">Equipment</a></li>
+                <li><Link to={`/category/clothing`} className="text-lg quicksand-500">Clothing</Link></li>
+                <li><Link to={`/category/shoes`} className="text-lg quicksand-500">Shoes</Link></li>
+                <li><Link to={`/category/equipment`} className="text-lg quicksand-500">Equipment</Link></li>
               </ul>
             </div>
           </div>
@@ -101,7 +101,7 @@ export default function Navbar() {
             {
               user.id ?
                 <>
-                  <div tabIndex={0} role="button" className="btn btn-ghost btn-circle">
+                  <div onClick={e => navigate('/wishlist')} tabIndex={0} role="button" className="btn btn-ghost btn-circle">
                     <div className="indicator">
                       <svg
                         xmlns="http://www.w3.org/2000/svg"

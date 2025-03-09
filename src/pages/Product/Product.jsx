@@ -1,6 +1,6 @@
 import Navbar from "../../components/Navbar/Navbar";
 import { useParams } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import apiRequest from "../../utils/apiRequest";
 import { API } from "../../constants/API";
 import { Carousel } from "react-responsive-carousel";
@@ -11,12 +11,49 @@ export default function Product() {
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
 
+  const [wishlist, setWishlist] = useState(false);
+  const [wishlistId, setWishlistId] = useState(null);
+  const [loadingWishlist, setLoadingWishlist] = useState(true);
+
+  const handleAddToWishlist = useCallback(() => {
+    setLoadingWishlist(true);
+    apiRequest(API.wishlist, {
+      method: "POST",
+    body: JSON.stringify({ product_id: id }),
+    })
+    .then((data) => {
+        setWishlistId(data.wishlist.id);
+        setLoadingWishlist(false);
+    })
+    .catch((error) => {
+        console.error("Wishlist add failed", error);
+        setLoadingWishlist(false);
+    });
+    setWishlist(true);
+
+  }, [id]);
+
+  const handleRemoveFromWishlist = useCallback(() => {
+    setLoadingWishlist(true);
+    apiRequest(API.wishlist + "/" + wishlistId, {
+      method: "DELETE",
+    })
+    .then(() => {
+        setWishlistId(null);
+        setLoadingWishlist(false);
+    })
+    .catch((error) => {
+        console.error("Wishlist remove failed", error);
+        setLoadingWishlist(false);
+    });
+    setWishlist(false);
+  }, [wishlistId]);
+
   useEffect(() => {
     apiRequest(API.product + "/" + id)
       .then((data) => {
         if (data.product) {
           setProduct(data.product);
-          console.log(data.product);
         }
         setLoading(false);
       })
@@ -25,6 +62,21 @@ export default function Product() {
         setLoading(false);
       });
   }, []);
+
+  useEffect(() => {
+    apiRequest(API.wishlistByProduct + "/" + id)
+      .then((data) => {
+        if (data.id) {
+            setWishlist(true);
+            setWishlistId(data.id);
+        }
+        setLoadingWishlist(false);
+      })
+      .catch((error) => {
+        console.error("Wishlist fetch failed", error);
+        setLoadingWishlist(false);
+      });
+  }, [product]);
 
   return (
     <>
@@ -82,7 +134,12 @@ export default function Product() {
               <button className="btn rounded-2xl bg-[#F3D0D7] text-[#C8809B] inconsolata-700 text-2xl hover:bg-[#dfbfc5]">
                 ADD To Cart
               </button>
-              <button className="btn rounded-2xl  text-[#C8809B] inconsolata-700 text-2xl flex flex-row gap-2">
+              {
+                loadingWishlist ? <button className="btn rounded-2xl  text-[#C8809B] inconsolata-700 text-2xl flex flex-row gap-2 skeleton cursor-no-drop">Loading...</button> :
+                wishlist ? <button onClick={handleRemoveFromWishlist} className="btn rounded-2xl  text-[#C8809B] inconsolata-700 text-2xl flex flex-row gap-2">
+                    Already in Wishlist
+                    </button> : 
+                <button onClick={handleAddToWishlist} className="btn rounded-2xl  text-[#C8809B] inconsolata-700 text-2xl flex flex-row gap-2">
               <svg
                   xmlns="http://www.w3.org/2000/svg"
                   xmlnsXlink="http://www.w3.org/1999/xlink"
@@ -132,7 +189,7 @@ export default function Product() {
                     />
                   </defs>
                 </svg>
-              </button>
+              </button>}
             </div>
           </div>
         </div>
