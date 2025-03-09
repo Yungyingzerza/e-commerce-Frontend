@@ -10,6 +10,7 @@ import Profile from '../pages/Profile/Profile'
 import Product from '../pages/Product/Product'
 import { setBalance, setEmail, setId, setLevel, setName, setProfileUrl, setSurname, setLoading } from '../store/userSlice'
 import LoadingPage from '../components/LoadingPage/LoadingPage'
+import Category from '../pages/Category/Category'
 function App() {
 
   const dispatch = useDispatch()
@@ -60,6 +61,7 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path="/profile" element={<Profile />} />
             <Route path="/product/:id" element={<Product />} />
+            <Route path="/category/:name" element={<Category />} />
             <Route path="*" element={<Home />} />
           </Routes>
         :

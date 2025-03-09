@@ -36,9 +36,9 @@ export default function Navbar() {
         <div className="navbar bg-[#F8E8EE] ">
           <div className="navbar-start md:ml-8">
             <div className='hidden lg:flex flex-row gap-10 items-center'>
-              <a href="#" className="text-lg quicksand-500">Clothing</a>
-              <a href="#" className="text-lg quicksand-500">Shoes</a>
-              <a href="#" className="text-lg quicksand-500">Equipment</a>
+              <Link to={`/category/clothing`} className="text-lg quicksand-500">Clothing</Link>
+              <Link to={`/category/shoes`} className="text-lg quicksand-500">Shoes</Link>
+              <Link to={`/category/equipment`} className="text-lg quicksand-500">Equipment</Link>
             </div>
             <div className="dropdown lg:hidden block">
               <div tabIndex="0" role="button" className="btn btn-ghost btn-circle">

@@ -4,8 +4,30 @@ import "react-responsive-carousel/lib/styles/carousel.min.css";
 import ImageWithBlur from '../../components/ImageWithBlur/ImageWithBlur'
 import MultiCarousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
-
+import apiRequest from '../../utils/apiRequest';
+import { API } from '../../constants/API';
+import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 export default function Home() {
+
+  const [recentProducts, setRecentProducts] = useState([])
+  const [loadingRecent, setLoadingRecent] = useState(true)
+  const navigate = useNavigate()
+
+  useEffect(() => {
+    apiRequest(API.recent)
+      .then(data => {
+        if (data) {
+          setRecentProducts(data)
+        }
+        setLoadingRecent(false)
+      })
+      .catch(error => {
+        console.error('Recent fetch failed', error)
+        setLoadingRecent(false)
+      })
+  }, [])
+
   return (
     <>
     <Navbar />
@@ -18,10 +40,14 @@ export default function Home() {
         </Carousel>
       </div>
 
-      <div className='flex flex-col gap-5'>
+      <div className='flex flex-col gap-5 w-full'>
         <h1 className='quicksand-700 text-2xl'>NEW PRODUCT</h1>
-        <div>
-          <MultiCarousel additionalTransfrom={0}
+        <div className='w-full'>
+          {loadingRecent ? 
+              <div className='w-full h-96 rounded-3xl bg-gray-200 skeleton '></div>
+            
+          :
+            <MultiCarousel additionalTransfrom={0}
             arrows
             autoPlaySpeed={3000}
             centerMode={true}
@@ -73,24 +99,20 @@ export default function Home() {
             slidesToSlide={1}
             swipeablee
           >
-            <figure className='w-11/12 rounded-3xl overflow-hidden'>
-              <img
-                src="/shoe1.png"
-                alt="Shoes" />
-            </figure>
 
-            <figure className='w-11/12 rounded-3xl overflow-hidden'>
-              <img
-                src="/shoe2.png"
-                alt="Shoes" />
-            </figure>
+            {
+              recentProducts.map(product => (
+                <figure onClick={e => navigate(`/product/${product.id}`)} key={product.id} className='w-11/12 rounded-3xl overflow-hidden cursor-pointer'>
+                  <img
+                    className='h-96 object-cover'
+                    src={product.product_image[0].image_url}
+                    alt={product.name} />
+                </figure>
+              ))
+            }
 
-            <figure className='w-11/12 rounded-3xl overflow-hidden'>
-              <img
-                src="/shoe3.png"
-                alt="Shoes" />
-            </figure>
           </MultiCarousel>
+          }
         </div>
       </div>
 

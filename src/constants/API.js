@@ -6,4 +6,6 @@ export const API = {
     "register": `${import.meta.env.VITE_BASE_API}/register`,
     "addresses": `${import.meta.env.VITE_BASE_API}/api/user/addresses`,
     "product": `${import.meta.env.VITE_BASE_API}/api/product`,
+    "recent": `${import.meta.env.VITE_BASE_API}/api/product/recent`,
+    "category": `${import.meta.env.VITE_BASE_API}/api/product/category`,
 }
