@@ -203,9 +203,9 @@ export default function Navbar() {
                       <div className="skeleton h-10 w-10 shrink-0 rounded-full"></div>
                     </>
                     :
-                    <div className='hidden lg:flex flex-row gap-10 items-center'>
+                    <div className='flex flex-row gap-10 items-center'>
                       <Link to={`/login`} className="text-lg quicksand-500 ">Login</Link>
-                      <Link to={`/register`} className="text-lg quicksand-500 ">Register</Link>
+                      <Link to={`/register`} className="hidden sm:block text-lg quicksand-500 ">Register</Link>
                     </div>
                   }
                 </>
