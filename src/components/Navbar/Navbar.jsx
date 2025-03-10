@@ -25,6 +25,8 @@ export default function Navbar() {
     dispatch(setBalance(''))
     dispatch(setLevel(''))
 
+    navigate('/')
+
   }, [])
 
   return (
@@ -58,6 +60,7 @@ export default function Navbar() {
               <ul
                 tabIndex="0"
                 className="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow">
+                <li><Link to={`/`} className="text-lg quicksand-500">Home</Link></li>
                 <li><Link to={`/category/clothing`} className="text-lg quicksand-500">Clothing</Link></li>
                 <li><Link to={`/category/shoes`} className="text-lg quicksand-500">Shoes</Link></li>
                 <li><Link to={`/category/equipment`} className="text-lg quicksand-500">Equipment</Link></li>
@@ -158,17 +161,17 @@ export default function Navbar() {
                             />
                           </defs>
                         </svg>
-                        <span className="badge badge-sm indicator-item">8</span>
+                        {user.cart.count > 0 && <span className="badge badge-sm indicator-item quicksand-500">{user.cart.count > 99 ? "99+" : user.cart.count}</span>}
                       </div>
                     </div>
                     <div
                       tabIndex={0}
                       className="card card-compact dropdown-content bg-base-100 z-[1] mt-3 w-52 shadow">
                       <div className="card-body">
-                        <span className="text-lg font-bold">8 Items</span>
-                        <span className="text-info">Subtotal: $999</span>
+                        <span className="text-lg font-bold quicksand-500">{user.cart.count} {user.cart.count > 1 ? "Items" : "Item"}</span>
+                        <span className="text-sm text-info quicksand-500">Subtotal: {user.cart.total_price.toLocaleString()} THB</span>
                         <div className="card-actions">
-                          <button className="btn btn-primary btn-block">View cart</button>
+                          <button onClick={e => navigate(`/cart`)} className="btn btn-primary btn-block quicksand-500">View cart</button>
                         </div>
                       </div>
                     </div>

@@ -10,4 +10,8 @@ export const API = {
     "category": `${import.meta.env.VITE_BASE_API}/api/product/category`,
     "wishlist": `${import.meta.env.VITE_BASE_API}/api/wishlist`,
     "wishlistByProduct": `${import.meta.env.VITE_BASE_API}/api/wishlist/product`,
+    "cartCount": `${import.meta.env.VITE_BASE_API}/api/cart/count`,
+    "cart": `${import.meta.env.VITE_BASE_API}/api/cart`,
+    "discount": `${import.meta.env.VITE_BASE_API}/api/discount`,
+    "order": `${import.meta.env.VITE_BASE_API}/api/order`,
 }

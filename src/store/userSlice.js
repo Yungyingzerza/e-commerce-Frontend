@@ -10,6 +10,10 @@ const initialState = {
     level: 1,
     profile_url: "",
     loading: true,
+    cart: {
+        count: 0,
+        total_price: 0,
+    }
 };
 
 export const userSlice = createSlice({
@@ -40,9 +44,14 @@ export const userSlice = createSlice({
         setLoading: (state, action) => {
             state.loading = action.payload;
         },
-
+        setCartTotalPrice: (state, action) => {
+            state.cart.total_price = action.payload;
+        },
+        setCartCount: (state, action) => {
+            state.cart.count = action.payload;
+        },
     },
 });
 
-export const { setId, setName, setSurname, setBalance, setEmail, setLevel, setProfileUrl, setLoading } = userSlice.actions;
+export const { setId, setName, setSurname, setBalance, setEmail, setLevel, setProfileUrl, setLoading, setCartCount, setCartTotalPrice } = userSlice.actions;
 export default userSlice.reducer;
