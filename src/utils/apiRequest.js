@@ -26,12 +26,12 @@ const getCsrfToken = async () => {
   };
   
   // Example API function using the CSRF token
-  const apiRequest = async (url, options = {}) => {
+  const apiRequest = async (url, options = {}, isJson = true) => {
     try {
       const token = await getCsrfToken();
       const tokenAuth = localStorage.getItem('token')
   
-      const defaultOptions = {
+      const defaultOptions = isJson ? {
         credentials: 'include', // Important for cookies
         headers: {
           'Content-Type': 'application/json',
@@ -39,7 +39,16 @@ const getCsrfToken = async () => {
           'X-XSRF-TOKEN': token,
           'Authorization': `Bearer ${tokenAuth}`
         },
-      };
+      }
+      :
+      {
+        credentials: 'include', // Important for cookies
+        headers: {
+          'Accept': 'application/json',
+          'X-XSRF-TOKEN': token,
+          'Authorization': `Bearer ${tokenAuth}`
+        },
+      }
   
       const response = await fetch(url, {
         ...defaultOptions,

@@ -25,6 +25,7 @@ import Category from "../pages/Category/Category";
 import Wishlist from "../pages/Wishlist/Wishlist";
 import Cart from "../pages/Cart/Cart";
 import { popToast } from "../store/toastSlice";
+import MyProduct from "../pages/MyProduct/MyProduct";
 function App() {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.user);
@@ -73,10 +74,15 @@ function App() {
   }, [user.id]);
 
   useEffect(() => {
-    // remove toast after 3 seconds
+    // remove toast after 1 seconds
     const timer = setTimeout(() => {
       dispatch(popToast());
-    }, 3000);
+    }, 1000);
+
+    //special case when more than 5 toast, remove all previous toast
+    if (toast.length > 5) {
+      dispatch(popToast());
+    }
 
     return () => {
       clearTimeout(timer);
@@ -89,7 +95,7 @@ function App() {
         {toast.map((item, index) => (
           <div
             key={index}
-            className={`alert alert-${item.type}`}
+            className={`alert alert-success`}
           >
             <span>{item.title}</span>
           </div>
@@ -104,6 +110,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/profile" element={<Profile />} />
+          <Route path="/myproduct" element={<MyProduct />} />
           <Route path="/wishlist" element={<Wishlist />} />
           <Route path="/cart" element={<Cart />} />
           <Route path="/product/:id" element={<Product />} />

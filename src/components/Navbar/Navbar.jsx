@@ -193,6 +193,7 @@ export default function Navbar() {
                           <span className="badge">New</span>
                         </Link>
                       </li>
+                      <li><Link to='/myproduct'>My Product</Link></li>
                       <li onClick={handleLogout}><a>Logout</a></li>
                     </ul>
                   </div>

@@ -6,6 +6,7 @@ export const API = {
     "register": `${import.meta.env.VITE_BASE_API}/register`,
     "addresses": `${import.meta.env.VITE_BASE_API}/api/user/addresses`,
     "product": `${import.meta.env.VITE_BASE_API}/api/product`,
+    "myproducts": `${import.meta.env.VITE_BASE_API}/api/product/myproducts`,
     "recent": `${import.meta.env.VITE_BASE_API}/api/product/recent`,
     "category": `${import.meta.env.VITE_BASE_API}/api/product/category`,
     "wishlist": `${import.meta.env.VITE_BASE_API}/api/wishlist`,
@@ -14,4 +15,5 @@ export const API = {
     "cart": `${import.meta.env.VITE_BASE_API}/api/cart`,
     "discount": `${import.meta.env.VITE_BASE_API}/api/discount`,
     "order": `${import.meta.env.VITE_BASE_API}/api/order`,
+    "image": `${import.meta.env.VITE_BASE_API}/api/product/image`,
 }
