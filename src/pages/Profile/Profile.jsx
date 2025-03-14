@@ -17,12 +17,28 @@ export default function Profile() {
   const [orders, setOrders] = useState([]);
   const [loadingOrders, setLoadingOrders] = useState(true);
   const [selectedOrder, setSelectedOrder] = useState(null);
-
+  const [loadingSelectedOrderCommnet, setLoadingSelectedOrderComment] =
+    useState(true);
+  const [selectedOrderComment, setSelectedOrderComment] = useState(null);
 
   const handleSelectOrder = (order) => {
+    setLoadingSelectedOrderComment(true);
     setSelectedOrder(order);
     document.getElementById("order").showModal();
-  }
+  };
+
+  useEffect(() => {
+    if (selectedOrder) {
+      apiRequest(`${API.comment}/user/${selectedOrder.product.id}`).then(
+        (response) => {
+          if (response.comments) {
+            setSelectedOrderComment(response.comments);
+          }
+          setLoadingSelectedOrderComment(false);
+        }
+      );
+    }
+  }, [selectedOrder]);
 
   useEffect(() => {
     if (user.id) {
@@ -117,6 +133,50 @@ export default function Profile() {
     });
   };
 
+  const handleComment = (e, mode) => {
+    e.preventDefault();
+    if (mode === "create") {
+      //close modal
+      document.getElementById("order").close();
+
+      //get comment and rating
+      const comment = e.target.elements.comment.value;
+      const rating = e.target.elements.rating.value;
+
+      //send request
+      apiRequest(API.comment, {
+        method: "POST",
+        body: JSON.stringify({
+          product_id: selectedOrder.product.id,
+          comment,
+          rating,
+        }),
+      })
+
+      setSelectedOrderComment(null)
+      setSelectedOrder(null)
+    } else {
+      //close modal
+      document.getElementById("order").close();
+
+      // Get comment and rating values
+      const comment = e.target.elements.comment.value;
+      const rating = e.target.elements.rating.value;
+
+      apiRequest(`${API.comment}/${selectedOrderComment[0].id}`, {
+        method: "PUT",
+        body: JSON.stringify({
+          comment,
+          rating,
+          product_id: selectedOrder.product.id,
+        }),
+      })
+
+      setSelectedOrderComment(null)
+      setSelectedOrder(null)
+    }
+  }
+
   return (
     <>
       <Navbar />
@@ -149,8 +209,8 @@ export default function Profile() {
           </div>
         </div>
       </dialog>
-      
-        <dialog id="order" className="modal">
+
+      <dialog id="order" className="modal">
         <div className="modal-box">
           <h3 className="font-bold text-lg">Order Detail</h3>
           <form method="dialog">
@@ -159,17 +219,111 @@ export default function Profile() {
               ✕
             </button>
           </form>
-          {selectedOrder &&
-          <div className="py-4 flex flex-col gap-5">
-            <img src={selectedOrder.product.product_image[0].image_url} className="w-20 h-20" />
-            <span className="quicksand-400">Product: {selectedOrder.product.name} {selectedOrder.size && `/ ${selectedOrder.size}`}</span>
-            <span className="quicksand-400">Sent to: {selectedOrder.user_address.address}</span>
-            <span className="quicksand-400">Discount: {selectedOrder.discount.toLocaleString()} THB</span>
-            <span className="quicksand-400">Original Price: {selectedOrder.product.price.toLocaleString()} THB</span>
-            <span className="quicksand-400">Quantity: {selectedOrder.quantity.toLocaleString()}</span>
-            <span className="quicksand-400">Total: {(selectedOrder.quantity * selectedOrder.product.price - selectedOrder.discount).toLocaleString()} THB</span>
-            <span className="quicksand-400">Order Date: {new Date(selectedOrder.created_at).toLocaleString()}</span>
-          </div>}
+          {selectedOrder && (
+            <div className="py-4 flex flex-col gap-5">
+              <img
+                src={selectedOrder.product.product_image[0].image_url}
+                className="w-20 h-20"
+              />
+              <span className="quicksand-400">
+                Product: {selectedOrder.product.name}{" "}
+                {selectedOrder.size && `/ ${selectedOrder.size}`}
+              </span>
+              <span className="quicksand-400">
+                Sent to: {selectedOrder.user_address.address}
+              </span>
+              <span className="quicksand-400">
+                Discount: {selectedOrder.discount.toLocaleString()} THB
+              </span>
+              <span className="quicksand-400">
+                Original Price: {selectedOrder.product.price.toLocaleString()}{" "}
+                THB
+              </span>
+              <span className="quicksand-400">
+                Quantity: {selectedOrder.quantity.toLocaleString()}
+              </span>
+              <span className="quicksand-400">
+                Total:{" "}
+                {(
+                  selectedOrder.quantity * selectedOrder.product.price -
+                  selectedOrder.discount
+                ).toLocaleString()}{" "}
+                THB
+              </span>
+              <span className="quicksand-400">
+                Order Date:{" "}
+                {new Date(selectedOrder.created_at).toLocaleString()}
+              </span>
+              {loadingSelectedOrderCommnet ? (
+                <div className="flex flex-col justify-center w-full p-10">
+                  <h1 className="text-xl ubuntu-sans-mono-400 ">Loading...</h1>
+                </div>
+              ) : (
+                <div className="flex flex-col gap-5">
+                  <h1 className="text-lg ubuntu-sans-mono-400">Your Comment</h1>
+                  <form className="flex flex-col gap-2" onSubmit={(e) => handleComment(e, selectedOrder && selectedOrderComment.length > 0 ? "update" : "create")}>
+                    {selectedOrder !== null && selectedOrderComment.length > 0 ?
+                      <>
+                        <fieldset className="fieldset">
+                          <legend className="fieldset-legend">Comment</legend>
+                          <input
+                            type="text"
+                            name="comment"
+                            className="w-full p-2 rounded-lg input"
+                            placeholder="Enter your comment"
+                            defaultValue={selectedOrderComment[0].comment}
+                          />
+                        </fieldset>
+                        <fieldset className="fieldset">
+                          <legend className="fieldset-legend">Rating</legend>
+                          <input
+                            name="rating"
+                            type="number"
+                            step={1}
+                            min={1}
+                            max={5}
+                            className="w-full p-2 rounded-lg input"
+                            placeholder="Enter your rating"
+                            defaultValue={selectedOrderComment[0].rating}
+                          />
+                        </fieldset>
+                        <button className="btn btn-success" type="submit">
+                          Save Comment
+                        </button>
+                      </>
+                      :
+                      <>
+                        <fieldset className="fieldset">
+                          <legend className="fieldset-legend">Comment</legend>
+                          <input
+                            name="comment"
+                            type="text"
+                            className="w-full p-2 rounded-lg input"
+                            placeholder="Enter your comment"
+                          />
+                        </fieldset>
+                        <fieldset className="fieldset">
+                          <legend className="fieldset-legend">Rating</legend>
+                          <input
+                            name="rating"
+                            type="number"
+                            step={1}
+                            min={1}
+                            max={5}
+                            className="w-full p-2 rounded-lg input"
+                            placeholder="Enter your rating"
+                          />
+                        </fieldset>
+                        <button className="btn btn-success" type="submit">
+                          Add Comment
+                        </button>
+                      </>
+                    }
+                  </form>
+                </div>
+              )}
+            </div>
+          )}
         </div>
       </dialog>
 
@@ -205,11 +359,7 @@ export default function Profile() {
         )}
         {loadingAdresses ? (
           <div className="flex flex-col justify-center w-full p-10">
-            <h1
-              className="text-xl mt-5  ubuntu-sans-mono-400 "
-            >
-              Loading...
-            </h1>
+            <h1 className="text-xl mt-5  ubuntu-sans-mono-400 ">Loading...</h1>
           </div>
         ) : (
           <div className="flex flex-col justify-center w-full p-10">
@@ -225,48 +375,49 @@ export default function Profile() {
               </button>
             </div>
 
-            {addresses && addresses.length > 0 && <div className="mt-3 flex flex-col bg-[#f8e7f0] w-full h-auto p-3 gap-5">
-              {addresses.map((address, index) => (
-                <div
-                  key={index}
-                  className="flex flex-row gap-5 justify-center items-center "
-                >
-                  <h1 className="text-xl flex-1 ubuntu-sans-mono-400">
-                    {address.address}
-                  </h1>
-                  <button
-                    onClick={() => handleEditAddress(address.id)}
-                    className="text-xl ubuntu-sans-mono-400 btn btn-warning"
+            {addresses && addresses.length > 0 && (
+              <div className="mt-3 flex flex-col bg-[#f8e7f0] w-full h-auto p-3 gap-5">
+                {addresses.map((address, index) => (
+                  <div
+                    key={index}
+                    className="flex flex-row gap-5 justify-center items-center "
                   >
-                    Edit
-                  </button>
-                  <button onClick={() =>handleDeleteAddress(address.id)} className="text-xl ubuntu-sans-mono-400 btn btn-error">
-                    Remove
-                  </button>
-                </div>
-              ))}
-            </div>}
+                    <h1 className="text-xl flex-1 ubuntu-sans-mono-400">
+                      {address.address}
+                    </h1>
+                    <button
+                      onClick={() => handleEditAddress(address.id)}
+                      className="text-xl ubuntu-sans-mono-400 btn btn-warning"
+                    >
+                      Edit
+                    </button>
+                    <button
+                      onClick={() => handleDeleteAddress(address.id)}
+                      className="text-xl ubuntu-sans-mono-400 btn btn-error"
+                    >
+                      Remove
+                    </button>
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
         )}
 
-        {
-          loadingOrders ? (
-            <div className="flex flex-col justify-center w-full p-10">
-              <h1
-                className="text-xl mt-5  ubuntu-sans-mono-400 "
-              >
-                Loading...
+        {loadingOrders ? (
+          <div className="flex flex-col justify-center w-full p-10">
+            <h1 className="text-xl mt-5  ubuntu-sans-mono-400 ">Loading...</h1>
+          </div>
+        ) : (
+          <div className="flex flex-col justify-center w-full p-10">
+            <div className="flex flex-row w-full justify-between items-center">
+              <h1 className="text-xl mt-5  ubuntu-sans-mono-400 ">
+                {orders.length > 1 ? "Orders" : "Order"}
               </h1>
             </div>
-          ) : (
-            <div className="flex flex-col justify-center w-full p-10">
-              <div className="flex flex-row w-full justify-between items-center">
-                <h1 className="text-xl mt-5  ubuntu-sans-mono-400 ">
-                  {orders.length > 1 ? "Orders" : "Order"}
-                </h1>
-              </div>
 
-              {orders && orders.length > 0 && <div className="mt-3 flex flex-col bg-[#f8e7f0] w-full h-auto p-3 gap-10">
+            {orders && orders.length > 0 && (
+              <div className="mt-3 flex flex-col bg-[#f8e7f0] w-full h-auto p-3 gap-10">
                 {orders.map((order, index) => (
                   <div
                     onClick={() => handleSelectOrder(order)}
@@ -274,20 +425,32 @@ export default function Profile() {
                     className="flex flex-row gap-5 justify-center items-center p-2 cursor-pointer"
                   >
                     <div className="md:text-lg flex-1 ubuntu-sans-mono-400 flex flex-row gap-5">
-                      <img src={order.product.product_image[0].image_url} className="w-10 h-10 hidden md:block" />
-                      <Link to={`/product/${order.product.id}`} className="md:text-lg ubuntu-sans-mono-400">{order.product.name}  {order.size && `/ ${order.size}`}</Link>
-
+                      <img
+                        src={order.product.product_image[0].image_url}
+                        className="w-10 h-10 hidden md:block"
+                      />
+                      <Link
+                        to={`/product/${order.product.id}`}
+                        className="md:text-lg ubuntu-sans-mono-400"
+                      >
+                        {order.product.name} {order.size && `/ ${order.size}`}
+                      </Link>
                     </div>
 
                     <div className="md:text-lg  ubuntu-sans-mono-400">
-                      Total : {(order.quantity * order.product.price - order.discount).toLocaleString()} THB
+                      Total :{" "}
+                      {(
+                        order.quantity * order.product.price -
+                        order.discount
+                      ).toLocaleString()}{" "}
+                      THB
                     </div>
                   </div>
                 ))}
-              </div>}
-            </div>
-          )
-        }
+              </div>
+            )}
+          </div>
+        )}
       </div>
     </>
   );

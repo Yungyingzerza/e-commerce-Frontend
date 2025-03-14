@@ -16,4 +16,6 @@ export const API = {
     "discount": `${import.meta.env.VITE_BASE_API}/api/discount`,
     "order": `${import.meta.env.VITE_BASE_API}/api/order`,
     "image": `${import.meta.env.VITE_BASE_API}/api/product/image`,
+    "search": `${import.meta.env.VITE_BASE_API}/api/product/search`,
+    "comment": `${import.meta.env.VITE_BASE_API}/api/comment`,
 }
