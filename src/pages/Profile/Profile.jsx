@@ -1,9 +1,10 @@
 import Navbar from "../../components/Navbar/Navbar";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { useEffect, useState } from "react";
 import apiRequest from "../../utils/apiRequest";
 import { API } from "../../constants/API";
 import { Link } from "react-router-dom";
+import { setProfileUrl } from "../../store/userSlice";
 export default function Profile() {
   const user = useSelector((state) => state.user);
 
@@ -20,6 +21,62 @@ export default function Profile() {
   const [loadingSelectedOrderCommnet, setLoadingSelectedOrderComment] =
     useState(true);
   const [selectedOrderComment, setSelectedOrderComment] = useState(null);
+  const [orderCount, setOrderCount] = useState(0);
+  const [nextLevelOrderGoal, setNextLevelOrderGoal] = useState(0);
+
+  const [tempProfileImage, setTempProfileImage] = useState(null);
+
+  const dispatch = useDispatch();
+
+  const getMembershipName = (level) => {
+    switch (level) {
+      case 1:
+        return "Bronze";
+      case 2:
+        return "Silver";
+      case 3:
+        return "Gold";
+      case 4:
+        return "Platinum";
+      default:
+        return "---";
+    }
+
+    //level 1 -> 2 need 5-19 orders
+    //level 2 -> 3 need 20-29 orders
+    //level 3 -> 4 need 30 orders
+  };
+
+  const getMembershipGoal = (level) => {
+    switch (level) {
+      case 1:
+        return 5;
+      case 2:
+        return 20;
+      case 3:
+        return 30;
+      case 4:
+        return 30;
+      default:
+        return 999;
+    }
+  };
+
+  const handleUpdateProfile = (e) => {
+    //update only profile image
+    e.preventDefault();
+    const formData = new FormData();
+    formData.append("profile_url", tempProfileImage);
+
+    apiRequest(`${API.user}/profile`, {
+      method: "POST",
+      body: formData,
+    }, false)
+    .then((data) => {
+      dispatch(setProfileUrl(data.profile_url));
+      document.getElementById("profile").close();
+    });
+  };
 
   const handleSelectOrder = (order) => {
     setLoadingSelectedOrderComment(true);
@@ -57,6 +114,13 @@ export default function Profile() {
       });
     }
   }, [user]);
+
+  useEffect(() => {
+    if (orders.length > 0) {
+      setOrderCount(orders.length);
+      setNextLevelOrderGoal(getMembershipGoal(user.level));
+    }
+  }, [orders]);
 
   const createAddress = () => {
     if (tempAddress === "") {
@@ -151,10 +215,10 @@ export default function Profile() {
           comment,
           rating,
         }),
-      })
+      });
 
-      setSelectedOrderComment(null)
-      setSelectedOrder(null)
+      setSelectedOrderComment(null);
+      setSelectedOrder(null);
     } else {
       //close modal
       document.getElementById("order").close();
@@ -170,12 +234,12 @@ export default function Profile() {
           rating,
           product_id: selectedOrder.product.id,
         }),
-      })
+      });
 
-      setSelectedOrderComment(null)
-      setSelectedOrder(null)
+      setSelectedOrderComment(null);
+      setSelectedOrder(null);
     }
-  }
+  };
 
   return (
     <>
@@ -261,8 +325,19 @@ export default function Profile() {
               ) : (
                 <div className="flex flex-col gap-5">
                   <h1 className="text-lg ubuntu-sans-mono-400">Your Comment</h1>
-                  <form className="flex flex-col gap-2" onSubmit={(e) => handleComment(e, selectedOrder && selectedOrderComment.length > 0 ? "update" : "create")}>
-                    {selectedOrder !== null && selectedOrderComment.length > 0 ?
+                  <form
+                    className="flex flex-col gap-2"
+                    onSubmit={(e) =>
+                      handleComment(
+                        e,
+                        selectedOrder && selectedOrderComment.length > 0
+                          ? "update"
+                          : "create"
+                      )
+                    }
+                  >
+                    {selectedOrder !== null &&
+                    selectedOrderComment.length > 0 ? (
                       <>
                         <fieldset className="fieldset">
                           <legend className="fieldset-legend">Comment</legend>
@@ -291,7 +366,7 @@ export default function Profile() {
                           Save Comment
                         </button>
                       </>
-                      :
+                    ) : (
                       <>
                         <fieldset className="fieldset">
                           <legend className="fieldset-legend">Comment</legend>
@@ -318,12 +393,68 @@ export default function Profile() {
                           Add Comment
                         </button>
                       </>
-                    }
+                    )}
                   </form>
                 </div>
               )}
             </div>
           )}
+        </div>
+      </dialog>
+
+      <dialog id="profile" className="modal">
+        <div className="modal-box">
+          <form method="dialog">
+            {/* if there is a button in form, it will close the modal */}
+            <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">
+              ✕
+            </button>
+          </form>
+          <h3 className="font-bold text-lg">Update Profile</h3>
+          <form className="py-4">
+            {
+              // user must has atleast level 2 to update profile
+              user.level > 1 ? (
+                <div className="w-full flex flex-col gap-5">
+                  <fieldset className="fieldset">
+                    <legend className="fieldset-legend">
+                      Profile Image
+                    </legend>
+                    <input type="file" className="file-input w-full" 
+                      onChange={(e) => {
+                        setTempProfileImage(e.target.files[0]) 
+                        dispatch(setProfileUrl(URL.createObjectURL(e.target.files[0])))
+                      }}
+                    />
+                  </fieldset>
+
+                  {
+                    //preview image
+                    user.profile_url && (
+                      <div className="flex flex-col gap-5 w-full justify-center items-center">
+                        <h1 className="text-lg ubuntu-sans-mono-400">
+                          Current Profile Image
+                        </h1>
+                        <div className="avatar">
+                          <div className="w-48 rounded-full">
+                            <img src={user.profile_url} />
+                          </div>
+                        </div>
+                      </div>
+                    )
+                  }
+
+                  <button className="btn btn-success" onClick={handleUpdateProfile}>
+                    Update Profile
+                  </button>
+                </div>
+              ) : (
+                <span>
+                  You must be at least Level 2 (Silver) to update your profile.
+                </span>
+              )
+            }
+          </form>
         </div>
       </dialog>
 
@@ -343,7 +474,11 @@ export default function Profile() {
           <div className="flex flex-col justify-center items-center">
             <div className="avatar mt-5">
               <div className="w-48 rounded-full">
-                <img src={user.profile_url} />
+                <img
+                  src={user.profile_url}
+                  onClick={() => document.getElementById("profile").showModal()}
+                  className="cursor-pointer"
+                />
               </div>
             </div>
             <div className="flex flex-row gap-5 mt-2">
@@ -354,6 +489,30 @@ export default function Profile() {
               <h1 className="text-2xl ubuntu-sans-mono-400">
                 Balance: {user.balance.toLocaleString()}
               </h1>
+            </div>
+            <div className="flex flex-col gap-5 mt-2 justify-center items-center">
+              <h1 className="text-2xl ubuntu-sans-mono-400">
+                Membership level: {getMembershipName(user.level)}
+              </h1>
+
+              <div
+                className="radial-progress text-2xl ubuntu-sans-mono-400 text-info flex flex-col justify-center items-center gap-2"
+                style={{
+                  "--value": `${(orderCount / nextLevelOrderGoal) * 100}`,
+                  "--size": "12rem",
+                  "--thickness": "1rem",
+                }}
+                aria-valuenow={(orderCount / nextLevelOrderGoal) * 100}
+                role="progressbar"
+              >
+                <span>{(orderCount / nextLevelOrderGoal) * 100}%</span>
+                <span className="text-sm text-black">
+                  Next is {getMembershipName(user.level + 1)}
+                </span>
+                <span className="text-xs text-black">
+                  ({orderCount}/{nextLevelOrderGoal} orders)
+                </span>
+              </div>
             </div>
           </div>
         )}

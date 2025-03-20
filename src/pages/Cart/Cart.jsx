@@ -6,6 +6,7 @@ import { Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { setCartCount, setCartTotalPrice } from "../../store/userSlice";
 import { useNavigate } from "react-router-dom";
+import { setBalance, setId, setLevel, setEmail, setName, setSurname, setProfileUrl } from "../../store/userSlice";
 export default function Cart() {
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -180,6 +181,19 @@ export default function Cart() {
           dispatch(setCartTotalPrice(0));
           setProduct([]);
         }
+
+        apiRequest(API.user)
+          .then((data) => {
+            if (data.id) {
+              dispatch(setId(data.id));
+              dispatch(setEmail(data.email));
+              dispatch(setName(data.name));
+              dispatch(setSurname(data.surname));
+              dispatch(setProfileUrl(data.profile_url));
+              dispatch(setLevel(data.level));
+              dispatch(setBalance(data.balance));
+            }
+          })
       })
       .catch((error) => {
         console.error("Order failed", error);
