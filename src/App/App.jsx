@@ -26,6 +26,8 @@ import Wishlist from "../pages/Wishlist/Wishlist";
 import Cart from "../pages/Cart/Cart";
 import { popToast } from "../store/toastSlice";
 import MyProduct from "../pages/MyProduct/MyProduct";
+import UserProduct from "../pages/UserProduct/UserProduct";
+
 function App() {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.user);
@@ -115,6 +117,7 @@ function App() {
           <Route path="/cart" element={<Cart />} />
           <Route path="/product/:id" element={<Product />} />
           <Route path="/category/:name" element={<Category />} />
+          <Route path="/user/:id" element={<UserProduct />} />
           <Route path="*" element={<Home />} />
         </Routes>
       ) : (
@@ -124,6 +127,7 @@ function App() {
           <Route path="/category/:name" element={<Category />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
+          <Route path="/user/:id" element={<UserProduct />} />
           <Route path="*" element={<Home />} />
         </Routes>
       )}

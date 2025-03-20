@@ -1,5 +1,5 @@
 import Navbar from "../../components/Navbar/Navbar";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState, useCallback } from "react";
 import apiRequest from "../../utils/apiRequest";
 import { API } from "../../constants/API";
@@ -22,6 +22,7 @@ export default function Product() {
   const [selectedSize, setSelectedSize] = useState(null);
 
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const user = useSelector((state) => state.user);
 
@@ -178,6 +179,7 @@ export default function Product() {
                 </>
               )}
 
+          {user.id &&            
               <div className="flex flex-col gap-5">
                 <button onClick={handleAddCart} className="btn rounded-2xl bg-[#F3D0D7] text-[#C8809B] inconsolata-700 text-2xl hover:bg-[#dfbfc5]">
                   ADD To Cart
@@ -238,7 +240,8 @@ export default function Product() {
                     </defs>
                   </svg>
                 </button>}
-              </div>
+              </div>}
+
             </div>
           </div>
           <div className="flex flex-col bg-[#F8E8EE] h-full p-10">
@@ -254,10 +257,11 @@ export default function Product() {
                       <img
                         src={comment.user.profile_url}
                         alt={comment.user.name}
-                        className="w-16 h-16 rounded-full"
+                        className="w-16 h-16 rounded-full cursor-pointer"
+                        onClick={() => navigate(`/user/${comment.user.id}`)}
                       />
                       <div className="flex-1">
-                        <h4 className="text-xl font-bold">{comment.user.name} {comment.user.surname}</h4>
+                        <h4 className="text-xl font-bold w-fit cursor-pointer" onClick={() => navigate(`/user/${comment.user.id}`)}>{comment.user.name} {comment.user.surname}</h4>
                         <p className="text-lg">{comment.comment}</p>
                         <div className="rating">
                           <input type="radio" name={`rating-${comment.id}`} className="mask mask-star-2 bg-orange-400" aria-label="1 star" disabled defaultChecked={comment.rating === 1}/>
